@@ -1,0 +1,82 @@
+
+
+#include <Firebase.h>
+#include <FirebaseArduino.h>
+#include <FirebaseCloudMessaging.h>
+#include <FirebaseError.h>
+#include <FirebaseHttpClient.h>
+#include <FirebaseObject.h>
+
+#include <FirebaseArduino.h> 
+#include <ESP8266WiFi.h>             //wifi library
+#define WIFI_SSID "MiA1"             //replace SSID with your wifi username
+#define WIFI_PASSWORD "shaunak@98"          //replace PWD with your wifi password
+#define WIFI_LED D5                  //connect a led to any of the gpio pins of the board and replace pin_number with it eg. D4                      
+
+#define FIREBASE_HOST "sdpd-communication.firebaseio.com"                         //link of api
+#define FIREBASE_AUTH "DDj0MDQ7GuR0do35fsmvNECkJHfNlVHizt7Oy2Pn"           //database secret
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(D5,OUTPUT);                         //define pinmodes
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  
+  //connect to wifi
+  while (WiFi.status() != WL_CONNECTED) {           //wait till connected to WiFi
+    delay(100);  
+    digitalWrite(WIFI_LED,LOW);                     //Blink the light till connected to WiFi
+    delay(100);
+    digitalWrite(WIFI_LED,HIGH);
+    Serial.print("."); }
+    
+  Serial.println("");
+  Serial.println("WiFi connected");
+  digitalWrite(WIFI_LED,HIGH);  
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);    
+  //connect to Database
+  //delay(1000);
+}
+/*String firebaseGet(String s){
+    String x =Firebase.getString(s);
+    bool w=Firebase.success();
+    yield();
+    delay(100);
+    return x+w;
+    delay(100);
+}*/
+void loop() {
+  String firebaseResult1 = Firebase.getString("/led1/status");
+  String firebaseResult2= Firebase.getString("/led2/status");
+  String firebaseResult3= Firebase.getString("/led3/status");
+  delay(100);
+  /*if (firebaseResult1=="ON"){
+      //code to happen if the status is ON  
+      Serial.println("ON1");
+      digitalWrite(D5,HIGH);
+  }else if(firebaseResult1=="OFF"){
+      //code to happen if the status is OFF
+      Serial.println("Off1");
+       digitalWrite(D5,LOW);
+    }*/
+    if (firebaseResult2=="ON"){
+      //code to happen if the status is ON  
+      Serial.println("On2");
+      digitalWrite(D5,HIGH);
+  }else if(firebaseResult2=="OFF"){
+      //code to happen if the status is OFF
+      Serial.println("Off2");
+       digitalWrite(D5,LOW);
+    }
+   /* if (firebaseResult3=="ON"){
+      //code to happen if the status is ON  
+      Serial.println("ON3");
+      digitalWrite(D5,HIGH);
+  }else if(firebaseResult3=="OFF"){
+      //code to happen if the status is OFF
+      Serial.println("Off3");
+       digitalWrite(D5,LOW);
+    }*/
+    //Serial.println(firebaseResult);
+} 
