@@ -1,0 +1,34 @@
+<html>
+    <head>
+    
+    </head>
+    
+    <body>
+        <h1>Hello, LeapJS v2</h1>
+    </body>
+    
+    <srcipt src="http://js.leapmotion.com/leap-0.6.0-beta1.min.js"></srcipt>
+    
+    <script type="text/javascript">
+    
+        function concatData(id, data)
+        {
+            return id + ": " + data + "<br>";
+        }
+        
+        var output = document.getElementById('output');
+        var frameString = "", handString = "", fingerString = "";
+        var hand, finger;
+        
+        var options = { enableGestures: true};
+        
+        Leap.loop(options, function(frame)
+        {
+            frameString = concatData("frame_id",frame.id);
+            frameString = concatData("num_hands",frame.hands.length);
+            frameString = concatData("num_fingers",frame.fingers.length);
+            //frameString = "<br>";
+            output.innerHTML = frameString;
+        });
+    </script>
+</html>

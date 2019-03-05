@@ -1,0 +1,157 @@
+// this code is working. do not manipulate.
+<html>
+  <head>
+    <title>Leap Gestures</title>
+    <script src="http://js.leapmotion.com/leap-0.6.4.js"></script>
+    <script>
+//      Leap.Controller.plugin('test', function(){
+//
+//        // return an object with functionality
+//        return {
+//
+//          // for hand, add methods
+//          hand: {
+//            favoriteColor: function(){
+//              // debugger; // uncomment this to see plugin context: the hand.
+//              return 'blue'
+//            }
+//          },
+//
+//          // for fingers/tools, run every frame
+//          pointable: function(pointable){
+//            // debugger; // uncomment this to see plugin context: the controller.
+//            pointable.favoriteColor = 'yellow'
+//          }
+//
+//        }
+//
+//      });
+
+//      controller = new Leap.Controller()
+//        .use('test')
+//        .connect()
+//        .on('frame', function(frame){
+//          var hand, finger;
+//           if ((hand = frame.hands[0]) && (finger = hand.fingers[0])){
+//             var output = document.getElementById('output');
+//             var string = 'hand: ' + hand.favoriteColor() + ', finger: ' + finger.favoriteColor;
+//             console.log(string);
+//             output.innerHTML = string;
+//          }
+//        });
+        
+        var controller = Leap.loop({enableGestures: true}, function(frame){
+                  
+            var str = "";
+            var cir=0;
+                if(frame.valid && frame.gestures.length > 0){
+                    frame.gestures.forEach(function(gesture){
+                        switch (gesture.type){
+                          case "circle":
+                //              
+//                                console.log("Circle Gesture");
+                                output.innerHTML = "circle gesture found, processing...";
+                                
+                                var myref = firebase.database().ref();
+
+                                var status1 = myref.child('/led1/status');
+                                status1.once('value',function(snapshot){
+                                    
+                                    if (snapshot.val() == 'ON')
+                                        {
+                                            var updates={};
+                                            //if(cir==0)
+                                           updates['/led1/status']='OFF';
+                                           // else
+                                                // updates['/led1/status']='OFF';
+                                            firebase.database().ref().update(updates);
+                                            output.innerHTML = "status was on, turned off";
+                                        }
+                                    else
+                                        {
+                                            var updates={};
+                                            //if(cir==0)
+                                           updates['/led1/status']='ON';
+                                           // else
+                                                // updates['/led1/status']='OFF';
+                                            firebase.database().ref().update(updates);
+                                            output.innerHTML = "status was off, turned on";
+                                        }
+//                                    if (snapshot.val()== 'ON')
+//                                        {
+//                                            var updates={};
+//                                            //if(cir==0)
+//                                           updates['/led1/status']='OFF';
+//                                           // else
+//                                                // updates['/led1/status']='OFF';
+//                                            firebase.database().ref().update(updates);
+//                                            break;
+//                                        }
+//                                    else 
+//                                        {
+//                                            var updates={};
+//                                            //if(cir==0)
+//                                           updates['/led1/status']='ON';
+//                                           // else
+//                                                // updates['/led1/status']='OFF';
+//                                            firebase.database().ref().update(updates);
+//                                            break;
+//                                        }
+                                })
+                                
+//                                var updates={};
+//                                //if(cir==0)
+//                               updates['/led1/status']='ON';
+//                               // else
+//                                    // updates['/led1/status']='OFF';
+//                                firebase.database().ref().update(updates);
+
+
+                              break;
+                          case "keyTap":
+                //              console.log("Key Tap Gesture");
+                                output.innerHTML = "keytap";
+                                var updates={};
+                                updates['/led3/status']='ON';
+                                firebase.database().ref().update(updates);
+                              break;
+                          case "screenTap":
+                //              console.log("Screen Tap Gesture");
+                                output.innerHTML = "screentap";
+                                var updates={};
+                                updates['/led3/status']='ON';
+                                firebase.database().ref().update(updates);
+                              break;
+                          case "swipe":
+                //              console.log("Swipe Gesture");
+                                output.innerHTML = "swipe";
+                                var updates={};
+                                updates['/led2/status']='ON';
+                                firebase.database().ref().update(updates);
+                              break;
+
+                        }
+        });
+  }
+});
+
+    </script>
+      <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAJudxDMfwCmhASQr2qR248riJmQnCnX5o",
+    authDomain: "sdpd-communication.firebaseapp.com",
+    databaseURL: "https://sdpd-communication.firebaseio.com",
+    projectId: "sdpd-communication",
+    storageBucket: "sdpd-communication.appspot.com",
+    messagingSenderId: "115793575269"
+  };
+  firebase.initializeApp(config);
+</script>
+  </head>
+  <body>
+    <div id="output">Wave your hand..</div>
+     
+  </body>
+</html>

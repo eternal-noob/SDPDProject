@@ -1,0 +1,16 @@
+<html>
+<head>
+</head>
+    <body>
+        <div id=output></div>
+<srcipt src="http://js.leapmotion.com/leap-0.6.0-beta1.min.js"></srcipt>
+
+<script type="text/javascript">
+  var output = document.getElementById('output');
+  Leap.loop(function (frame) {
+    output.innerHTML = 'Frame: ' + frame.id;
+  });
+</script>
+
+    </body>
+</html>
